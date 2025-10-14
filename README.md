@@ -1,50 +1,65 @@
-# Welcome to your Expo app 👋
+# Wing
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Your Flight Finder
 
-## Get started
+## Overview
 
-1. Install dependencies
+Wing is a cross-platform mobile experience built with Expo Router that helps travelers search, compare, and track flights. The app leverages React Native components, smooth navigation, and polished visuals to keep the booking workflow fast and intuitive across iOS, Android, and web.
 
-   ```bash
-   npm install
-   ```
+## Prerequisites
 
-2. Start the app
+- **Node.js** v18 LTS or newer with npm.
+- **Git** for cloning the repository.
+- **Expo Go** installed on your device (optional, but recommended for quick previews).
+- **Android Studio** or **Xcode** if you want to run native emulators/simulators.
 
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Clone the repository
 
 ```bash
-npm run reset-project
+git clone https://github.com/your-org/wing.git
+cd wing
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Install dependencies
+
+```bash
+npm install
+```
+
+## Start the Expo development server
+
+```bash
+npx expo start
+```
+
+- **Press `a`** in the Expo CLI to launch the Android emulator.
+- **Press `i`** to open the iOS simulator (macOS only).
+- **Press `w`** to use the web build in your browser.
+- **Scan the QR code** with Expo Go to preview on a physical device.
+
+## Available npm scripts
+
+- **`npm start`**: Alias for `expo start`.
+- **`npm run android`**: Start the project directly on an Android device/emulator.
+- **`npm run ios`**: Start the project on the iOS simulator.
+- **`npm run web`**: Run the web build.
+- **`npm run lint`**: Lint the project with Expo's ESLint config.
+- **`npm run reset-project`**: Reset the starter template if you want a clean slate.
+
+## Project structure highlights
+
+- **`app/`**: Source files using Expo Router's file-based routing.
+- **`app.json` / `app.config`**: Project configuration for Expo.
+- **`package.json`**: Dependencies and scripts referenced above.
+
+## Troubleshooting tips
+
+- **Dependencies fail to install**: Ensure you are on Node.js v18+ and clear npm cache with `npm cache clean --force` if needed.
+- **Expo CLI cannot find Android SDK**: Open Android Studio once and install the required SDK packages.
+- **Metro bundler stuck**: Stop the server and rerun `npx expo start -c` to clear the bundler cache.
 
 ## Learn more
 
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- [Expo documentation](https://docs.expo.dev/)
+- [Expo Router guides](https://docs.expo.dev/router/introduction/)
+- [React Native documentation](https://reactnative.dev/docs/getting-started)
