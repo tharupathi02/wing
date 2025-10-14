@@ -21,24 +21,6 @@ export default function RootLayout() {
         theme="light"
         swipeToDismissDirection="up"
         closeButton
-        toastOptions={{
-          titleStyle: {
-            fontFamily: "Poppins-Regular",
-            fontWeight: "700",
-          },
-          descriptionStyle: {
-            fontFamily: "Poppins-Regular",
-            fontWeight: "300",
-          },
-          actionButtonTextStyle: {
-            fontFamily: "Poppins-Regular",
-            fontWeight: "700",
-          },
-          cancelButtonTextStyle: {
-            fontFamily: "Poppins-Regular",
-            fontWeight: "700",
-          },
-        }}
       />
     </GestureHandlerRootView>
   );

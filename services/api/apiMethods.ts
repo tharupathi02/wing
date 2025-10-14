@@ -23,8 +23,8 @@ const axiosInstance: AxiosInstance = axios.create({
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'x-rapidapi-key': '',
-        'x-rapidapi-host': ''
+        'x-rapidapi-key': '2197eca9c1mshfbf7b587a420264p1874cdjsn26cc971559c4',
+        'x-rapidapi-host': 'sky-scrapper.p.rapidapi.com'
     },
 });
 
