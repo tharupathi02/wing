@@ -11,7 +11,7 @@ export default function Index() {
 
   useEffect(() => {
     setTimeout(() => {
-      router.replace("/(screens)/(tabs)");
+      router.replace("/(screens)/auth/signin/signin-screen");
     }, 5000);
   }, []);
 
