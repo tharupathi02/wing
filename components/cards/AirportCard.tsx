@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SearchAirportItem } from '@/types/searchAirport';
 import AppColors from '@/constant/Colors';
+import ASSETS from '@/constant/Assets';
 
 interface AirportCardProps {
   airport: SearchAirportItem;
@@ -10,7 +11,7 @@ interface AirportCardProps {
 
 const AirportCard: React.FC<AirportCardProps> = ({ airport }) => {
   return (
-    <View className="bg-white rounded-3xl p-5 mb-4 shadow-md">
+    <View className="bg-white rounded-3xl p-5 mb-4 shadow-md shadow-primary-300">
       {/* Header - City/Airport Name */}
       <View className="mb-4">
         <Text className="text-lg font-bold text-textPrimary text-center" numberOfLines={1}>
@@ -32,12 +33,11 @@ const AirportCard: React.FC<AirportCardProps> = ({ airport }) => {
 
         {/* Center - Icon */}
         <View className="mx-4">
-          <View 
-            className="rounded-full p-3"
-            style={{ backgroundColor: AppColors.primary }}
-          >
-            <Ionicons name="airplane" size={24} color="white" />
-          </View>
+          <Image
+            source={ASSETS.PLANE.AIRPLANE_SIDE}
+            className="w-36 h-12"
+            resizeMode="contain"
+          />
         </View>
 
         {/* Right - Location Type */}
