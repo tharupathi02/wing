@@ -9,6 +9,7 @@ const BASE_URL = "https://sky-scrapper.p.rapidapi.com/api/v1";
 
 const FLIGHTS = {
   SEARCH_AIRPORT: "/flights/searchAirport",
+  SEARCH_FLIGHTS: "/flights/searchFlights",
 };
 
 export default {
