@@ -5,6 +5,11 @@ export interface SearchFlightRequest {
   originEntityId: string;
   destinationEntityId: string;
   date: string; // Format: YYYY-MM-DD
+  returnDate?: string; // Format: YYYY-MM-DD (optional)
+  cabinClass?: string; // economy, premium_economy, business, first
+  adults?: number;
+  children?: number;
+  sortBy?: string; // best, price_high, fastest, outbound_take_off_time, etc.
 }
 
 // Response Types
@@ -20,6 +25,8 @@ export interface FlightData {
   itineraries: Itinerary[];
   messages: any[];
   filterStats: FilterStats;
+  flightsSessionId: string;
+  destinationImageUrl: string;
 }
 
 export interface FlightContext {
@@ -35,6 +42,7 @@ export interface Itinerary {
   isSelfTransfer: boolean;
   isProtectedSelfTransfer: boolean;
   farePolicy: FarePolicy;
+  fareAttributes?: any;
   eco?: EcoInfo;
   tags?: string[];
   isMashUp: boolean;
@@ -45,6 +53,7 @@ export interface Itinerary {
 export interface Price {
   raw: number;
   formatted: string;
+  pricingOptionId?: string;
 }
 
 export interface Leg {
@@ -63,9 +72,11 @@ export interface Leg {
 
 export interface Location {
   id: string;
+  entityId?: string;
   name: string;
   displayCode: string;
   city: string;
+  country?: string;
   isHighlighted: boolean;
 }
 
@@ -114,6 +125,7 @@ export interface CarrierDetail {
   name: string;
   alternateId: string;
   allianceId: number;
+  displayCode?: string;
 }
 
 export interface FarePolicy {
@@ -132,11 +144,14 @@ export interface FilterStats {
   airports: AirportGroup[];
   carriers: Carrier[];
   stopPrices: StopPrices;
+  alliances: any[];
 }
 
 export interface DurationFilter {
   min: number;
   max: number;
+  multiCityMin?: number;
+  multiCityMax?: number;
 }
 
 export interface AirportGroup {
@@ -146,6 +161,7 @@ export interface AirportGroup {
 
 export interface Airport {
   id: string;
+  entityId?: string;
   name: string;
 }
 

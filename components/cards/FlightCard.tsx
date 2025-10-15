@@ -1,10 +1,18 @@
-import React from "react";
-import { View, Text, TouchableOpacity, Image } from "react-native";
-import { Clock, Plane, MoveRight, ArrowLeftRight } from "lucide-react-native";
+import ASSETS from "@/constant/Assets";
 import AppColors from "@/constant/Colors";
 import { Itinerary } from "@/types/searchFlight";
 import { LinearGradient } from "expo-linear-gradient";
-import ASSETS from "@/constant/Assets";
+import {
+  ArrowLeftRight,
+  Ban,
+  Check,
+  Clock,
+  MoveRight,
+  Plane,
+  RefreshCcw,
+} from "lucide-react-native";
+import React from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 
 interface FlightCardProps {
   itinerary: Itinerary;
@@ -45,15 +53,9 @@ const FlightCard: React.FC<FlightCardProps> = ({ itinerary, onPress }) => {
       <View className="flex-row items-center mb-3">
         <View className="flex-row items-center flex-1">
           {isReturn ? (
-            <ArrowLeftRight
-              size={16}
-              color={AppColors.primary}
-            />
+            <ArrowLeftRight size={16} color={AppColors.primary} />
           ) : (
-            <MoveRight
-              size={16}
-              color={AppColors.primary}
-            />
+            <MoveRight size={16} color={AppColors.primary} />
           )}
           <Text className="text-xs font-poppins-semibold text-primary ml-1">
             {isReturn ? "Return Flight" : "Outbound Flight"}
@@ -80,14 +82,17 @@ const FlightCard: React.FC<FlightCardProps> = ({ itinerary, onPress }) => {
           <Text className="text-xs font-poppins-regular text-textSecondary mt-0.5">
             {leg.origin.city}
           </Text>
+          {leg.origin.country && (
+            <Text className="text-xs font-poppins-regular text-textSecondary">
+              {leg.origin.country}
+            </Text>
+          )}
         </View>
 
         {/* Flight Path */}
         <View className="flex-1 items-center px-2">
           <View>
-            <Text className="text-xs font-poppins-medium text-primary">
-              {}
-            </Text>
+            <Text className="text-xs font-poppins-medium text-primary">{}</Text>
           </View>
           <View className="flex-row items-center justify-center w-full">
             <Image
@@ -116,6 +121,11 @@ const FlightCard: React.FC<FlightCardProps> = ({ itinerary, onPress }) => {
           <Text className="text-xs font-poppins-regular text-textSecondary mt-0.5">
             {leg.destination.city}
           </Text>
+          {leg.destination.country && (
+            <Text className="text-xs font-poppins-regular text-textSecondary">
+              {leg.destination.country}
+            </Text>
+          )}
         </View>
       </View>
 
@@ -133,12 +143,20 @@ const FlightCard: React.FC<FlightCardProps> = ({ itinerary, onPress }) => {
           </View>
         )}
         <View className="flex-1">
-          <Text
-            className="text-xs font-poppins-semibold text-textPrimary"
-            numberOfLines={1}
-          >
-            {leg.carriers.marketing[0]?.name || "Airline"}
-          </Text>
+          <View className="flex-row items-center gap-2">
+            <Text
+              className="text-xs font-poppins-semibold text-textPrimary"
+              numberOfLines={1}
+            >
+              {leg.carriers.marketing[0]?.name || "Airline"}
+            </Text>
+            {leg.segments && leg.segments[0]?.flightNumber && (
+              <Text className="text-xs font-poppins-medium text-primary">
+                ({leg.carriers.marketing[0]?.alternateId || ""}{" "}
+                {leg.segments[0].flightNumber})
+              </Text>
+            )}
+          </View>
           <Text className="text-xs font-poppins-regular text-textSecondary">
             {formatDate(leg.departure)}
           </Text>
@@ -186,6 +204,50 @@ const FlightCard: React.FC<FlightCardProps> = ({ itinerary, onPress }) => {
 
           {/* Return Leg */}
           {returnLeg && renderLegInfo(returnLeg, true)}
+
+          {/* Fare Policy Badges */}
+          {(itinerary.farePolicy.isPartiallyRefundable ||
+            itinerary.farePolicy.isCancellationAllowed ||
+            itinerary.farePolicy.isChangeAllowed) && (
+            <View className="flex-row flex-wrap gap-2 mb-4">
+              {itinerary.farePolicy.isCancellationAllowed && (
+                <View className="bg-green-50 border border-green-200 rounded-lg px-3 py-1.5 flex-row items-center">
+                  <Check size={12} color="#10B981" />
+                  <Text className="text-xs font-poppins-medium text-green-700 ml-1">
+                    Cancellable
+                  </Text>
+                </View>
+              )}
+              {itinerary.farePolicy.isPartiallyRefundable && (
+                <View className="bg-blue-50 border border-blue-200 rounded-lg px-3 py-1.5 flex-row items-center">
+                  <RefreshCcw size={12} color="#3B82F6" />
+                  <Text className="text-xs font-poppins-medium text-blue-700 ml-1">
+                    Refundable
+                  </Text>
+                </View>
+              )}
+              {itinerary.farePolicy.isChangeAllowed && (
+                <View className="bg-amber-50 border border-amber-200 rounded-lg px-3 py-1.5 flex-row items-center">
+                  <RefreshCcw size={12} color="#F59E0B" />
+                  <Text className="text-xs font-poppins-medium text-amber-700 ml-1">
+                    Changeable
+                  </Text>
+                </View>
+              )}
+            </View>
+          )}
+
+          {/* Non-refundable/Non-changeable Warning */}
+          {!itinerary.farePolicy.isPartiallyRefundable &&
+            !itinerary.farePolicy.isCancellationAllowed &&
+            !itinerary.farePolicy.isChangeAllowed && (
+              <View className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4 flex-row items-center">
+                <Ban size={14} color="#EF4444" />
+                <Text className="text-xs font-poppins-medium text-red-700 ml-2 flex-1">
+                  Non-refundable • No changes allowed
+                </Text>
+              </View>
+            )}
 
           {/* Price and Book Button */}
           <View className="flex-row items-center justify-between pt-4 border-t border-gray-200">

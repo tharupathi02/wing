@@ -1,5 +1,8 @@
 import ProfileAppBar from "@/components/appbar/ProfileAppBar";
 import AirportSearchModal from "@/components/modals/AirportSearchModal";
+import AdvancedFilterModal, {
+  AdvancedFilterData,
+} from "@/components/modals/AdvancedFilterModal";
 import AirportSelector from "@/components/selectors/AirportSelector";
 import DateSelector from "@/components/selectors/DateSelector";
 import FlightCard from "@/components/cards/FlightCard";
@@ -8,7 +11,7 @@ import ApiManager from "@/services/api/apiManager";
 import { SearchAirportItem } from "@/types/searchAirport";
 import { Itinerary } from "@/types/searchFlight";
 import { LinearGradient } from "expo-linear-gradient";
-import { Plane } from "lucide-react-native";
+import { Plane, SlidersHorizontal } from "lucide-react-native";
 import React, { useState } from "react";
 import {
   ActivityIndicator,
@@ -32,6 +35,9 @@ const HomeScreen = () => {
     "origin" | "destination" | null
   >(null);
   const [showModal, setShowModal] = useState(false);
+  const [showAdvancedFilter, setShowAdvancedFilter] = useState(false);
+  const [advancedFilters, setAdvancedFilters] =
+    useState<AdvancedFilterData | null>(null);
   const [flights, setFlights] = useState<Itinerary[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
@@ -57,6 +63,10 @@ const HomeScreen = () => {
     setShowModal(false);
   };
 
+  const handleAdvancedFilterApply = (filters: AdvancedFilterData) => {
+    setAdvancedFilters(filters);
+  };
+
   const handleSearch = async () => {
     if (!originAirport || !destinationAirport || !departureDate) {
       toast.error("Missing Information", {
@@ -72,6 +82,9 @@ const HomeScreen = () => {
     try {
       // Format date as YYYY-MM-DD
       const formattedDate = departureDate.toISOString().split("T")[0];
+      const formattedReturnDate = advancedFilters?.returnDate
+        ? advancedFilters.returnDate.toISOString().split("T")[0]
+        : undefined;
 
       const response = await ApiManager.flights.searchFlights({
         originSkyId: originAirport.skyId,
@@ -79,6 +92,11 @@ const HomeScreen = () => {
         originEntityId: originAirport.entityId,
         destinationEntityId: destinationAirport.entityId,
         date: formattedDate,
+        returnDate: formattedReturnDate,
+        cabinClass: advancedFilters?.cabinClass || "economy",
+        adults: advancedFilters?.adults || 1,
+        children: advancedFilters?.children || 0,
+        sortBy: advancedFilters?.sortBy || "best",
       });
 
       if (response.status && response.data.itineraries) {
@@ -165,18 +183,26 @@ const HomeScreen = () => {
       >
         <LinearGradient
           colors={[AppColors.primary, "transparent"]}
+          start={{ x: 0.5, y: 0 }}
+          end={{ x: 0.5, y: 1 }}
           style={{
             position: "absolute",
-            top: -300,
+            top: -150,
             left: -100,
             right: -100,
             height: 500,
-            borderRadius: 500,
           }}
         />
       </View>
 
       <SafeAreaView className="flex-1 mb-20">
+        {/* Profile App Bar */}
+        <ProfileAppBar
+          name="Deshan Tharupathi"
+          profileImage="https://avatar.iran.liara.run/public/50"
+          onNotificationPress={handleNotification}
+        />
+
         <FlatList
           data={flights}
           renderItem={renderFlightItem}
@@ -186,13 +212,6 @@ const HomeScreen = () => {
           contentContainerStyle={{ paddingBottom: 20 }}
           ListHeaderComponent={
             <View>
-              {/* Profile App Bar */}
-              <ProfileAppBar
-                name="Deshan Tharupathi"
-                profileImage="https://avatar.iran.liara.run/public/50"
-                onNotificationPress={handleNotification}
-              />
-
               {/* Search Box Container */}
               <View className="px-5 mt-6 mb-6">
                 <LinearGradient
@@ -204,28 +223,6 @@ const HomeScreen = () => {
                     borderRadius: 24,
                   }}
                 >
-                  {/* Trip Type Tabs */}
-                  <View className="flex-row mb-5">
-                    <View className="bg-white/20 rounded-full p-1 flex-row">
-                      <TouchableOpacity
-                        className="bg-white rounded-full px-6 py-2"
-                        activeOpacity={0.8}
-                      >
-                        <Text className="text-sm font-bold text-primary">
-                          One way
-                        </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        className="px-6 py-2"
-                        activeOpacity={0.8}
-                      >
-                        <Text className="text-sm font-semibold text-white/80">
-                          Return
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-
                   {/* Origin Airport Selector */}
                   <AirportSelector
                     label="From"
@@ -252,6 +249,21 @@ const HomeScreen = () => {
                     onDateChange={setDepartureDate}
                     minimumDate={new Date()}
                   />
+
+                  {/* Advanced Filter Button */}
+                  <TouchableOpacity
+                    onPress={() => setShowAdvancedFilter(true)}
+                    activeOpacity={0.7}
+                    className="bg-white/20 rounded-xl py-3 px-4 flex-row items-center justify-center"
+                  >
+                    <SlidersHorizontal size={16} color="white" />
+                    <Text className="text-sm font-semibold text-white ml-2">
+                      Advanced Filters
+                    </Text>
+                    {advancedFilters && (
+                      <View className="ml-2 bg-white rounded-full w-2 h-2" />
+                    )}
+                  </TouchableOpacity>
 
                   {/* Search Button */}
                   <TouchableOpacity
@@ -309,6 +321,14 @@ const HomeScreen = () => {
         title={
           currentSelector === "origin" ? "Select Origin" : "Select Destination"
         }
+      />
+
+      {/* Advanced Filter Modal */}
+      <AdvancedFilterModal
+        visible={showAdvancedFilter}
+        onClose={() => setShowAdvancedFilter(false)}
+        onApply={handleAdvancedFilterApply}
+        initialFilters={advancedFilters || undefined}
       />
     </View>
   );
