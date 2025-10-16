@@ -130,11 +130,6 @@ const HomeScreen = () => {
   const renderFlightItem = ({ item }: { item: Itinerary }) => (
     <FlightCard
       itinerary={item}
-      onPress={() => {
-        toast.info("Flight Selected", {
-          description: `Price: ${item.price.formatted}`,
-        });
-      }}
     />
   );
 

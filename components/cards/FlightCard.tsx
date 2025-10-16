@@ -9,6 +9,8 @@ import {
   Clock,
   MoveRight,
   Plane,
+  PlaneLanding,
+  PlaneTakeoff,
   RefreshCcw,
 } from "lucide-react-native";
 import React from "react";
@@ -160,6 +162,55 @@ const FlightCard: React.FC<FlightCardProps> = ({ itinerary, onPress }) => {
           <Text className="text-xs font-poppins-regular text-textSecondary">
             {formatDate(leg.departure)}
           </Text>
+        </View>
+      </View>
+
+      {/* Flight Timeline */}
+      <View className="mt-4 px-2 mb-3">
+        <View className="flex-row items-center justify-between">
+          {/* Departure */}
+          <View
+            className="flex-row items-center justify-center gap-2"
+            style={{ width: "25%" }}
+          >
+            <PlaneTakeoff size={16} color={AppColors.primary} />
+            <View className="flex-col items-center">
+              <Text className="text-xs font-poppins-semibold text-textPrimary text-center">
+                {formatTime(leg.departure)}
+              </Text>
+              <Text className="text-[10px] font-poppins-regular text-textSecondary text-center">
+                {leg.origin.displayCode}
+              </Text>
+            </View>
+          </View>
+
+          {/* Timeline Bar with Duration */}
+          <View className="flex-1 items-center justify-center mx-2">
+            <View className="relative w-full items-center">
+              <View className="h-0.5 bg-primary w-full" />
+              <View className="absolute bg-white px-2 border border-primary rounded-full mt-2">
+                <Text className="text-[10px] font-poppins-medium text-primary">
+                  {formatDuration(leg.durationInMinutes)}
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          {/* Arrival */}
+          <View
+            className="flex-row items-center justify-center gap-2"
+            style={{ width: "25%" }}
+          >
+            <PlaneLanding size={16} color={AppColors.primary} />
+            <View className="flex-col items-center">
+              <Text className="text-xs font-poppins-semibold text-textPrimary text-center">
+                {formatTime(leg.arrival)}
+              </Text>
+              <Text className="text-[10px] font-poppins-regular text-textSecondary text-center">
+                {leg.destination.displayCode}
+              </Text>
+            </View>
+          </View>
         </View>
       </View>
     </View>
