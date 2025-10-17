@@ -2,28 +2,40 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { Image } from 'expo-image';
 
-const ProfileHeader: React.FC = () => {
+interface ProfileHeaderProps {
+  name: string;
+  email: string;
+  imageUri?: string;
+}
+
+const ProfileHeader: React.FC<ProfileHeaderProps> = ({ name, email, imageUri }) => {
   return (
-    <View className="p-2 mb-4 items-center">
+    <View className="p-3 mb-4 items-center">
       {/* Profile Image */}
       <View className="mb-4">
-        <View className="w-32 h-32 rounded-full bg-primary-100 border-4 border-primary overflow-hidden items-center justify-center">
-          <Image
-              source={{ uri: "https://avatar.iran.liara.run/public/50" }}
+        <View className="w-28 h-28 rounded-full bg-primary-100 border-4 border-primary overflow-hidden items-center justify-center">
+          {imageUri ? (
+            <Image
+              source={{ uri: imageUri }}
               className="w-full h-full"
               contentFit="cover"
             />
+          ) : (
+            <Text className="text-4xl font-bold text-primary">
+              {name.charAt(0).toUpperCase()}
+            </Text>
+          )}
         </View>
       </View>
 
       {/* Name */}
-      <Text className="text-3xl font-bold text-textPrimary mb-1">
-        Deshan Tharupathi
+      <Text className="text-2xl font-bold text-textPrimary mb-1">
+        {name}
       </Text>
 
       {/* Email */}
-      <Text className="text-sm text-textSecondary">
-        tharupathi02@gmail.com
+      <Text className="text-base text-textSecondary">
+        {email}
       </Text>
     </View>
   );

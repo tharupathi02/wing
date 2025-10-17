@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 import { 
   User, 
   Edit3, 
@@ -16,16 +17,36 @@ import {
   Info,
   LogOut
 } from 'lucide-react-native';
+import { toast } from 'sonner-native';
 import ProfileHeader from '@/components/profile/ProfileHeader';
 import SettingsSection from '@/components/profile/SettingsSection';
 import { SettingsMenuItemProps } from '@/components/profile/SettingsMenuItem';
+import { useUserStore } from '@/store/useUserStore';
+import LogoutModal from '@/components/modals/LogoutModal';
 
 const ProfileScreen = () => {
-  // Mock user data
+  const router = useRouter();
+  const { currentUser, logout, isAuthenticated } = useUserStore();
+  const [logoutModalVisible, setLogoutModalVisible] = useState(false);
+  
+  // Get user data from Zustand store
   const userData = {
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    imageUri: undefined, // Add image URI when available
+    name: currentUser?.name || 'Guest',
+    email: currentUser?.email || 'guest@example.com',
+    imageUri: currentUser?.profileImage,
+  };
+
+  // Handle logout button press
+  const handleLogoutPress = () => {
+    setLogoutModalVisible(true);
+  };
+
+  // Handle logout confirmation
+  const handleLogoutConfirm = () => {
+    setLogoutModalVisible(false);
+    logout();
+    toast.success('Logged out successfully');
+    router.replace('/(screens)/auth/signin/signin-screen');
   };
 
   // Account Settings
@@ -121,7 +142,7 @@ const ProfileScreen = () => {
     {
       icon: <LogOut size={22} color="#EF4444" />,
       title: 'Logout',
-      onPress: () => console.log('Logout'),
+      onPress: handleLogoutPress,
       showChevron: false,
     },
   ];
@@ -134,7 +155,11 @@ const ProfileScreen = () => {
         showsVerticalScrollIndicator={false}
       >
         {/* Profile Header */}
-        <ProfileHeader />
+        <ProfileHeader
+          name={userData.name}
+          email={userData.email}
+          imageUri={userData.imageUri}
+        />
 
         {/* Settings Sections */}
         <SettingsSection title="Account" items={accountSettings} />
@@ -146,6 +171,14 @@ const ProfileScreen = () => {
         {/* Bottom Spacing */}
         <View className="h-8" />
       </ScrollView>
+
+      {/* Logout Modal */}
+      <LogoutModal
+        visible={logoutModalVisible}
+        onClose={() => setLogoutModalVisible(false)}
+        onConfirm={handleLogoutConfirm}
+        userName={currentUser?.name}
+      />
     </SafeAreaView>
   );
 };

@@ -2,20 +2,23 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import AppColors from '@/constant/Colors';
 import { Bell, UserRound } from 'lucide-react-native';
+import { useUserStore } from '@/store/useUserStore';
 
 interface ProfileAppBarProps {
-  name: string;
-  profileImage?: string;
   onNotificationPress?: () => void;
   onProfilePress?: () => void;
 }
 
 const ProfileAppBar: React.FC<ProfileAppBarProps> = ({
-  name,
-  profileImage,
   onNotificationPress,
   onProfilePress,
 }) => {
+  const { currentUser } = useUserStore();
+  
+  // Get user data from store
+  const userName = currentUser?.name || 'Guest';
+  const profileImage = currentUser?.profileImage;
+
   return (
     <View className="flex-row items-center justify-between px-5 pt-4 pb-3">
       {/* Left Section - Profile */}
@@ -39,13 +42,13 @@ const ProfileAppBar: React.FC<ProfileAppBarProps> = ({
           )}
         </View>
 
-        {/* Name and Trip Count */}
+        {/* Name and Welcome Message */}
         <View className="flex-1">
-          <Text className="text-sm font-medium text-textPrimary" numberOfLines={1}>
+          <Text className="text-sm font-medium text-white" numberOfLines={1}>
             Welcome,
           </Text>
-          <Text className="text-lg font-bold text-textPrimary" numberOfLines={1}>
-            {name}
+          <Text className="text-lg font-bold text-white" numberOfLines={1}>
+            {userName}
           </Text>
         </View>
       </TouchableOpacity>

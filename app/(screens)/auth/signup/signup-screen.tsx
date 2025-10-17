@@ -12,21 +12,43 @@ import {
   View,
 } from "react-native";
 import { toast } from "sonner-native";
+import { useUserStore } from "@/store/useUserStore";
 
 const SignUpScreen = () => {
   const router = useRouter();
+  const { signUp, loading } = useUserStore();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSignUp = () => {
-    // Handle sign up logic
-    toast.success("Sign up successful", {
-      description: "You have successfully signed up",
-    });
-    console.log("Sign up with:", name, email, password);
-    router.push('/(screens)/auth/signin/signin-screen')
+  const handleSignUp = async () => {
+    // Validate fields
+    if (!name.trim() || !email.trim() || !password.trim()) {
+      toast.error("Validation Error", {
+        description: "Please fill in all fields",
+      });
+      return;
+    }
+
+    // Handle sign up logic with Zustand
+    const result = await signUp(name.trim(), email.trim(), password);
+    
+    if (result.success) {
+      toast.success("Sign up successful", {
+        description: result.message,
+      });
+      // Clear form
+      setName("");
+      setEmail("");
+      setPassword("");
+      // Navigate to sign in
+      router.push('/(screens)/auth/signin/signin-screen');
+    } else {
+      toast.error("Sign up failed", {
+        description: result.message,
+      });
+    }
   };
 
   return (
@@ -114,9 +136,10 @@ const SignUpScreen = () => {
           onPress={handleSignUp}
           className="bg-primary rounded-xl py-4 mb-6 shadow-sm"
           activeOpacity={0.8}
+          disabled={loading}
         >
           <Text className="text-white text-center text-base font-bold">
-            Sign Up
+            {loading ? "Signing Up..." : "Sign Up"}
           </Text>
         </TouchableOpacity>
 
