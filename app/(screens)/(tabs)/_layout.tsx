@@ -1,6 +1,6 @@
 import AppColors from '@/constant/Colors';
 import { Tabs } from 'expo-router';
-import { BadgePercent, Home, Plane, UserRound } from 'lucide-react-native';
+import { MapPin, Home, Plane, UserRound } from 'lucide-react-native';
 import React from 'react';
 import { Text, View } from 'react-native';
 
@@ -26,7 +26,7 @@ const TabIconRenderer = ({
             case 'home':
                 return <Home size={size} color={color} strokeWidth={focused ? 1.5 : 1} />;
             case 'airports':
-                return <Plane size={size} color={color} strokeWidth={focused ? 1.5 : 1} />;
+                return <MapPin size={size} color={color} strokeWidth={focused ? 1.5 : 1} />;
             case 'flights':
                 return <Plane size={size} color={color} strokeWidth={focused ? 1.5 : 1} />;
             case 'profile':
