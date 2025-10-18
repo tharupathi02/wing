@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import AppColors from '@/constant/Colors';
 
 interface DateSelectorProps {
-  label: string;
+  label?: string;
   placeholder: string;
   selectedDate?: Date | null;
   onDateChange: (date: Date) => void;
@@ -45,9 +45,11 @@ const DateSelector: React.FC<DateSelectorProps> = ({
 
   return (
     <View className="mb-3">
-      <Text className="text-xs font-semibold text-white/80 mb-2 ml-1">
-        {label}
-      </Text>
+      {label && (
+        <Text className="text-xs font-semibold text-white/80 mb-2 ml-1">
+          {label}
+        </Text>
+      )}
       <TouchableOpacity
         onPress={() => setShowPicker(true)}
         activeOpacity={0.7}

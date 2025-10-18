@@ -6,18 +6,41 @@ import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
 import { Image, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { toast } from 'sonner-native'
+import { useUserStore } from '@/store/useUserStore'
 
 const SignInScreen = () => {
   const router = useRouter()
+  const { signIn, loading } = useUserStore()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
 
-  const handleSignIn = () => {
-    // Handle sign in logic
-    toast.success('Sign in successful', { description: 'You have successfully signed in' })
-    console.log('Sign in with:', email, password)
-    router.push('/(screens)/(tabs)')
+  const handleSignIn = async () => {
+    // Validate fields
+    if (!email.trim() || !password.trim()) {
+      toast.error('Validation Error', {
+        description: 'Please fill in all fields',
+      })
+      return
+    }
+
+    // Handle sign in logic with Zustand
+    const result = await signIn(email.trim(), password)
+    
+    if (result.success) {
+      toast.success('Sign in successful', { 
+        description: result.message 
+      })
+      // Clear form
+      setEmail('')
+      setPassword('')
+      // Navigate to main app
+      router.push('/(screens)/(tabs)')
+    } else {
+      toast.error('Sign in failed', {
+        description: result.message,
+      })
+    }
   }
 
   return (
@@ -90,9 +113,10 @@ const SignInScreen = () => {
           onPress={handleSignIn}
           className="bg-primary rounded-xl py-4 mb-6 shadow-sm"
           activeOpacity={0.8}
+          disabled={loading}
         >
           <Text className="text-white text-center text-base font-bold">
-            Sign In
+            {loading ? 'Signing In...' : 'Sign In'}
           </Text>
         </TouchableOpacity>
 

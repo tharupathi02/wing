@@ -193,8 +193,6 @@ const HomeScreen = () => {
       <SafeAreaView className="flex-1 mb-20">
         {/* Profile App Bar */}
         <ProfileAppBar
-          name="Deshan Tharupathi"
-          profileImage="https://avatar.iran.liara.run/public/50"
           onNotificationPress={handleNotification}
         />
 

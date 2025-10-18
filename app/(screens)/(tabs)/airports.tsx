@@ -95,7 +95,7 @@ const AirportsScreen = () => {
   }
 
   return (
-    <View className="flex-1 bg-white pb-20">
+    <View className="flex-1 bg-white mb-20">
       <AppTopBar
         title="Airports"
         showBackButton={false}

@@ -13,7 +13,7 @@ const TabIconRenderer = ({
     inactiveColor = AppColors.textSecondary,
 }: {
     focused: boolean;
-    iconName: 'home' | 'airports' | 'prices' | 'profile';
+    iconName: 'home' | 'airports' | 'flights' | 'profile';
     label: string;
     size?: number;
     activeColor?: string;
@@ -27,8 +27,8 @@ const TabIconRenderer = ({
                 return <Home size={size} color={color} strokeWidth={focused ? 1.5 : 1} />;
             case 'airports':
                 return <Plane size={size} color={color} strokeWidth={focused ? 1.5 : 1} />;
-            case 'prices':
-                return <BadgePercent size={size} color={color} strokeWidth={focused ? 1.5 : 1} />;
+            case 'flights':
+                return <Plane size={size} color={color} strokeWidth={focused ? 1.5 : 1} />;
             case 'profile':
                 return <UserRound size={size} color={color} strokeWidth={focused ? 1.5 : 1} />;
             default:
@@ -96,15 +96,15 @@ const _layout = () => {
             />
 
             <Tabs.Screen
-                name="prices"
+                name="flights"
                 options={{
-                    title: 'Prices',
+                    title: 'Flights',
                     headerShown: false,
                     tabBarIcon: ({ focused }) => (
                         <TabIconRenderer
                             focused={focused}
-                            iconName="prices"
-                            label="Prices"
+                            iconName="flights"
+                            label="flights"
                         />
                     ),
                 }}
@@ -120,7 +120,7 @@ const _layout = () => {
                             focused={focused}
                             iconName="profile"
                             label="Profile"
-                        />
+                        />  
                     ),
                 }}
             />
